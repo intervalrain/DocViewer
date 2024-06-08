@@ -7,9 +7,11 @@
 
   <ItemGroup>
     <None Remove="Views\Docs\" />
+    <None Remove="Models\Docs\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Docs\" />
+    <Folder Include="Models\Docs\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
