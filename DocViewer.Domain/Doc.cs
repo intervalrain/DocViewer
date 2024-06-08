@@ -11,11 +11,12 @@ public class Doc : Entity
     public string Category { get; set; }
     public IEnumerable<string> Keywords { get; set; }
     public DateTime DateTime { get; set; }
+    public string Content { get; set; }
     public bool Top { get; set; }
 
     public DateOnly Date => DateOnly.FromDateTime(DateTime);
 
-    public Doc(int docId, string title, string author, string description, string category, IEnumerable<string> keywords, DateTime dateTime)
+    public Doc(int docId, string title, string author, string description, string category, string content, IEnumerable<string> keywords, DateTime dateTime)
         : base(Guid.NewGuid())
     {
         DocId = docId;
@@ -23,6 +24,7 @@ public class Doc : Entity
         Author = author;
         Description = description;
         Category = category;
+        Content = content;
         Keywords = keywords;
         DateTime = dateTime;
         Top = false;
