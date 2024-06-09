@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-using DocViewer.Domain.Common;
+﻿using DocViewer.Domain.Common;
 
 using YamlDotNet.Serialization;
 
@@ -16,7 +14,16 @@ public class Board : Entity
     {
     }
 
-    public List<string> Categories => Docs.Select(doc => doc.Category).Distinct().OrderBy(x => x).ToList();
+    public List<string> Categories
+    {
+        get
+        {
+            var list = Docs.Select(doc => doc.Category).Distinct().OrderBy(x => x).ToList();
+            list.Insert(0, "All");
+            return list;
+        }
+    }
+    
 
     public List<Doc> GetDocs(string sort, string filter)
     {
@@ -43,6 +50,40 @@ public class Board : Entity
             };
         }
         return list;
+    }
+
+    private int CalculateScore(Doc doc, string text)
+    {
+        int score = 0;
+
+        if (doc.Title.Contains(text, StringComparison.CurrentCultureIgnoreCase)) score += Weighting.TitleWeight;
+        if (doc.Author.Contains(text, StringComparison.CurrentCultureIgnoreCase)) score += Weighting.AuthorWeight;
+        if (doc.Description.Contains(text, StringComparison.CurrentCultureIgnoreCase)) score += Weighting.DescriptionWeight;
+        if (doc.Content.Contains(text, StringComparison.CurrentCultureIgnoreCase)) score += Weighting.ContentWeight;
+        foreach (var keyword in doc.Keywords)
+        {
+            if (keyword.Contains(text, StringComparison.CurrentCultureIgnoreCase)) score += Weighting.KeywordWeight;
+        }
+
+        return score;
+    }
+
+    public List<Doc> SearchDocs(string text, int k = 10)
+    {
+        text = text.ToLower();
+
+        var result = _docs
+            .Select(doc => new
+            {
+                Doc = doc,
+                Score = CalculateScore(doc, text)
+            })
+            .OrderByDescending(result => result.Score)
+            .Take(k)
+            .Select(result => result.Doc)
+            .ToList();
+
+        return result;
     }
 
     public async Task AddDocAsync(string raw, CancellationToken cancellationToken)

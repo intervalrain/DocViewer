@@ -2,7 +2,8 @@
 @model DocsViewModel
 @{
     ViewData["Title"] = "Docs";
-    var currentSort = Convert.ToString(ViewData["CurrentSort"]);
+    var currentSort = Model.Sort;
+    var currentFilter = Model.Filter;
 }
 <div class="container-flex">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -11,9 +12,82 @@
             <a href="/Docs/NewPost" class="btn btn-success">New Post</a>
         </div>
     </div>
-    @Html.Partial("_DocsPartial", Model)
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="category-container">
+            @foreach (var category in Model.Categories)
+            {
+                <a href="?filter=@category&sort=@currentSort" class="btn @(currentFilter == @category
+                                                                ? "btn-primary"
+                                                                : "btn-light")">@category</a>
+                                                            }
+        </div>
+        <div class="search-container">
+            <div class="d-flex align-items-center">
+                <input type="search" class="form-control" id="search-input" placeholder="Search..." aria-label="Search" spellcheck="false" data-ms-editor="true">
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th><a href="?sort=@(Model.Sort == "DocId" ? "id_desc" : "DocId")&filter=@currentFilter">Doc Id</a></th>
+                    <th><a href="?sort=@(Model.Sort == "Category" ? "category_desc" : "Category")&filter=@currentFilter">Category</a></th>
+                    <th><a href="?sort=@(Model.Sort == "Title" ? "title_desc" : "Title")&filter=@currentFilter">Title</a></th>
+                    <th><a href="?sort=@(Model.Sort == "Author" ? "author_desc" : "Author")&filter=@currentFilter">Author</a></th>
+                    <th><a href="?sort=@(Model.Sort == "DateTime" ? "datetime_desc" : "DateTime")&filter=@currentFilter">DateTime</a></th>
+                </tr>
+            </thead>
+            <tbody id="docs-container">
+                @Html.Partial("_DocsPartial", Model)
+            </tbody>
+        </table>
+    </div>
 </div>
 
+<script>$('#partialZone').load("/Docs/DocsPartial")</script>
+
+<script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+
+
 <script>
-    $('#partialZone').load("/Docs/DocsPartial")
+    document.addEventListener("DOMContentLoaded", function () {
+        var rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(function (row) {
+            row.addEventListener("click", function () {
+                var docId = this.getAttribute('data-doc-id');
+                window.location.href = '@Url.Action("Doc", "Docs")/' + docId
+            });
+        });
+
+        document.getElementById("search-input").addEventListener("keydown", function (event) {
+            if (event.key == "Enter") {
+                event.preventDefault();
+                const data = {
+                    text: event.target.value
+                };
+                fetch("/Docs/Search", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    const container = document.getElementById('docs-container');
+                    container.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error("Error searching posts:", error);
+                })
+            }
+        });
+    });
 </script>

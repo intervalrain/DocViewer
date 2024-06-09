@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace DocViewer.Presentation.Controllers;
 
-public abstract class ControllerRoot : Controller
+[ApiController]
+[Route("[controller]")]
+public abstract class ApiController : Controller
 {
     protected ActionResult Problem(List<Error> errors)
     {
