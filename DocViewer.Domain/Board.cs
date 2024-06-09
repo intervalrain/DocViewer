@@ -18,6 +18,33 @@ public class Board : Entity
 
     public List<string> Categories => Docs.Select(doc => doc.Category).Distinct().OrderBy(x => x).ToList();
 
+    public List<Doc> GetDocs(string sort, string filter)
+    {
+        var list = _docs;
+        if (filter != "All")
+        {
+            list = list.Where(doc => doc.Category == filter).ToList();
+        }
+        if (!string.IsNullOrEmpty(sort))
+        {
+            list = sort switch
+            {
+                "DocId" => list.OrderBy(doc => doc.DocId).ToList(),
+                "id_desc" => list.OrderByDescending(doc => doc.DocId).ToList(),
+                "Category" => list.OrderBy(doc => doc.Category).ToList(),
+                "category_desc" => list.OrderByDescending(doc => doc.Category).ToList(),
+                "Title" => list.OrderBy(doc => doc.Title).ToList(),
+                "title_desc" => list.OrderByDescending(doc => doc.Title).ToList(),
+                "Author" => list.OrderBy(doc => doc.Author).ToList(),
+                "author_desc" => list.OrderByDescending(doc => doc.Author).ToList(),
+                "DateTime" => list.OrderBy(doc => doc.DateTime).ToList(),
+                "datetime_desc" => list.OrderByDescending(doc => doc.DateTime).ToList(),
+                _ => list
+            };
+        }
+        return list;
+    }
+
     public async Task AddDocAsync(string raw, CancellationToken cancellationToken)
     {
         var text = await File.ReadAllTextAsync(raw, cancellationToken);

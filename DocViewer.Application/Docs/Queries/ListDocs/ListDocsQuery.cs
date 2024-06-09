@@ -6,4 +6,4 @@ using MediatR;
 
 namespace DocViewer.Application.Docs.Queries.ListDocs;
 
-public record ListDocsQuery(string UserId, string Sort, string Filter) : IRequest<ErrorOr<Board>>;
+public record ListDocsQuery(string UserId) : IRequest<ErrorOr<Board>>;

@@ -6,13 +6,20 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-        @foreach (var category in Model.Board.Categories)
+    <div class="category-container">
+        @foreach (var category in Model.Categories)
         {
-            <a href="?filter=@category&sort=@currentSort" class="btn @(currentSort == @category
+            <a href="?filter=@category&sort=@currentSort" class="btn @(currentFilter == @category
                                                                 ? "btn-primary"
                                                                 : "btn-light")">@category</a>
         }
+    </div>
+    <div class="search-container">
+        <div class="d-flex align-items-center">
+            <form class="w-100 me-3">
+                <input type="search" class="form-control" placeholder="Search..." aria-label="Search" spellcheck="false" data-ms-editor="true">
+            </form>
+        </div>
     </div>
 </div>
 <div class="table-responsive">
@@ -28,20 +35,22 @@
         </thead>
         <tbody>
             <div id="doc-list-container">
-                @foreach (var doc in Model.Board.Docs)
+                @foreach (var doc in Model.Board.GetDocs(currentSort, currentFilter))
                 {
                     <tr class="clickable-row" data-doc-id="@doc.DocId">
                         <td>@doc.DocId</td>
                         <td>@doc.Category</td>
                         <td>@doc.Title</td>
                         <td>@doc.Author</td>
-                        <td>@doc.DateTime</td>
+                        <td>@doc.FormatDateTime</td>
                     </tr>
                 }
             </div>
         </tbody>
     </table>
 </div>
+
+<script src="/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

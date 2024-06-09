@@ -1,11 +1,12 @@
-﻿using DocViewer.Application.Common.Interfaces;
+﻿using System;
+
+using DocViewer.Application.Common.Interfaces;
 using DocViewer.Application.Common.Security.Users;
 using DocViewer.Application.Docs.Queries.GetDoc;
 using DocViewer.Application.Docs.Queries.ListDocs;
 using DocViewer.Presentation.Models.Docs;
 
 using MediatR;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocViewer.Presentation.Controllers;
@@ -30,9 +31,9 @@ public class DocsController : ControllerRoot
             Problem);
     }
 
-	public async Task<IActionResult> Index(string sort = "",string filter = "")
+	public async Task<IActionResult> Index(string sort = "id_desc", string filter = "All")
 	{
-		var query = new ListDocsQuery(_currentUser.UserId, sort, filter);
+        var query = new ListDocsQuery(_currentUser.UserId);
 		var result = await _sender.Send(query, default);
 		return result.Match(
 			board => View(new DocsViewModel

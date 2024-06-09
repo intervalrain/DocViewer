@@ -15,6 +15,7 @@ public class Doc : Entity
     public bool Top { get; set; }
 
     public DateOnly Date => DateOnly.FromDateTime(DateTime);
+    public string FormatDateTime => DateTime.ToString("yyyy/MM/dd hh:mm");
 
     public Doc(int docId, string title, string author, string description, string category, string content, IEnumerable<string> keywords, DateTime dateTime)
         : base(Guid.NewGuid())
