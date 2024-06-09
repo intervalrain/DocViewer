@@ -1,9 +1,11 @@
+using DocViewer.Application;
 using DocViewer.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddControllersWithViews();
+    builder.Services.AddApplication();
     builder.Services.AddInfrastructure();
+    builder.Services.AddControllersWithViews();
 }
 
 var app = builder.Build();

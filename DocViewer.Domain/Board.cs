@@ -1,8 +1,7 @@
-﻿using System;
+﻿using System.Threading;
 
 using DocViewer.Domain.Common;
 
-using YamlDotNet.Core.Tokens;
 using YamlDotNet.Serialization;
 
 namespace DocViewer.Domain;
@@ -19,9 +18,9 @@ public class Board : Entity
 
     public List<string> Categories => Docs.Select(doc => doc.Category).Distinct().OrderBy(x => x).ToList();
 
-    public void AddDoc(string raw)
+    public async Task AddDocAsync(string raw, CancellationToken cancellationToken)
     {
-        var text = File.ReadAllText(raw);
+        var text = await File.ReadAllTextAsync(raw, cancellationToken);
         var yaml = text.Split("---")[1].Trim();
         var content = text.Substring(text.IndexOf("---", yaml.Length) + 3).Trim();
 

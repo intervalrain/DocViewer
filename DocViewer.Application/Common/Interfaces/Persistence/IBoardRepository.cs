@@ -4,6 +4,6 @@ namespace DocViewer.Application.Common.Interfaces.Persistence;
 
 public interface IBoardRepository
 {
-    Board Get(); 
+    Task<Board?> GetBoardAsync(CancellationToken cancellationToken);
 }
 

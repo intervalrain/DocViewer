@@ -1,33 +1,46 @@
-﻿using DocViewer.Application.Common.Interfaces.Persistence;
-using DocViewer.Domain;
+﻿using DocViewer.Application.Common.Interfaces;
+using DocViewer.Application.Common.Security.Users;
+using DocViewer.Application.Docs.Queries.GetDoc;
+using DocViewer.Application.Docs.Queries.ListDocs;
 using DocViewer.Presentation.Models.Docs;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocViewer.Presentation.Controllers;
 
-public class DocsController : Controller
+public class DocsController : ControllerRoot
 {
-	private readonly Board _board;
+    private readonly ISender _sender;
+	private readonly string _userId = "Rain Hu";
 
-    public DocsController(IBoardRepository boardRepository)
+    public DocsController(ISender sender)
 	{
-		_board = boardRepository.Get();
+        _sender = sender;
     }
 
-	public IActionResult Doc(int id)
+	public async Task<IActionResult> Doc(int id)
 	{
-		var doc = _board.Docs.FirstOrDefault(doc => doc.DocId == id);
-		return View(doc);
-	}
+        var query = new GetDocQuery(_userId, id);
+        var result = await _sender.Send(query, default);
+        return result.Match(
+            View,
+            Problem);
+    }
 
-	public IActionResult Index()
+	public async Task<IActionResult> Index(string sort = "",string filter = "")
 	{
-		var model = new DocsViewModel
-		{
-			Board = _board
-		};
-		return View(model);
+		var query = new ListDocsQuery(_userId, sort, filter);
+		var result = await _sender.Send(query, default);
+		return result.Match(
+			board => View(new DocsViewModel
+			{
+				Board = board,
+				Sort = sort,
+				Filter = filter
+			}),
+			Problem);
 	}
 }
 

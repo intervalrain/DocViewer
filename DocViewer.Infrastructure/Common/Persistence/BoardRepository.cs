@@ -1,4 +1,6 @@
-﻿using DocViewer.Application.Common.Interfaces.Persistence;
+﻿using System.Threading;
+
+using DocViewer.Application.Common.Interfaces.Persistence;
 using DocViewer.Domain;
 
 namespace DocViewer.Infrastructure.Common.Persistence;
@@ -8,18 +10,23 @@ public class BoardRepository : IBoardRepository
     private const string path = "/Users/rainhu/workspace/DocViewer/Markdowns";
     private static Board _board; 
 
-    public BoardRepository()
+    private async Task<Board> InitialBoard(CancellationToken cancellationToken)
     {
-        _board = new Board();
-        LoadMarkdownFiles();
+        var board = new Board();
+        await LoadMarkdownFiles(board, cancellationToken);
+        return board;
     }
 
-    public Board Get()
+    public async Task<Board?> GetBoardAsync(CancellationToken cancellationToken)
     {
+        if (_board == null)
+        {
+            return _board = await InitialBoard(cancellationToken);
+        }
         return _board;
     }
 
-    private void LoadMarkdownFiles()
+    private async Task LoadMarkdownFiles(Board board, CancellationToken cancellationToken)
     {
         if (!Directory.Exists(path))
         {
@@ -31,7 +38,7 @@ public class BoardRepository : IBoardRepository
 
         foreach (var file in files)
         {
-            _board.AddDoc(file.FullName);
+            await board.AddDocAsync(file.FullName, cancellationToken);
         }
     }
 }

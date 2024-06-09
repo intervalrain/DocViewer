@@ -15,6 +15,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.37.0" />
+    <PackageReference Include="MediatR" Version="12.3.0" />
+    <PackageReference Include="ErrorOr" Version="2.0.1" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>

@@ -29,7 +29,9 @@
             </div>
         </div>
         <div class="card-body">
-            <p>@Html.Raw(Markdown.ToHtml(Model.Content))</p>
+            <div class="scrollable">
+                <p>@Html.Raw(Markdown.ToHtml(Model.Content))</p>
+            </div>
         </div>
     </div>
 </div>
