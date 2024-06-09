@@ -13,16 +13,17 @@ namespace DocViewer.Presentation.Controllers;
 public class DocsController : ControllerRoot
 {
     private readonly ISender _sender;
-	private readonly string _userId = "Rain Hu";
+	private readonly CurrentUser _currentUser;
 
-    public DocsController(ISender sender)
+    public DocsController(ISender sender, ICurrentUserProvider currentUserProvider)
 	{
         _sender = sender;
+		_currentUser = currentUserProvider.CurrentUser;
     }
 
 	public async Task<IActionResult> Doc(int id)
 	{
-        var query = new GetDocQuery(_userId, id);
+        var query = new GetDocQuery(_currentUser.UserId, id);
         var result = await _sender.Send(query, default);
         return result.Match(
             View,
@@ -31,7 +32,7 @@ public class DocsController : ControllerRoot
 
 	public async Task<IActionResult> Index(string sort = "",string filter = "")
 	{
-		var query = new ListDocsQuery(_userId, sort, filter);
+		var query = new ListDocsQuery(_currentUser.UserId, sort, filter);
 		var result = await _sender.Send(query, default);
 		return result.Match(
 			board => View(new DocsViewModel
