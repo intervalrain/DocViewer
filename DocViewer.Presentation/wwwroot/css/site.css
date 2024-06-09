@@ -18,6 +18,17 @@ body {
     display: flex;
     flex-direction: column;
     overflow: auto;
+    width: 100%;
+}
+
+.scrollable {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    overflow-x: auto;
+    overflow-y: scroll;
+    box-sizing: border-box;
 }
 
 main {
