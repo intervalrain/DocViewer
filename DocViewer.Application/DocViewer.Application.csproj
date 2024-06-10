@@ -18,6 +18,9 @@
     <None Remove="Common\Security\Users\" />
     <None Remove="Common\Security\Roles\" />
     <None Remove="Docs\Commands\NewPost\" />
+    <None Remove="Common\Security\Permissions\" />
+    <None Remove="Common\Security\Policies\" />
+    <None Remove="Common\Security\Request\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />
@@ -33,6 +36,9 @@
     <Folder Include="Common\Security\Users\" />
     <Folder Include="Common\Security\Roles\" />
     <Folder Include="Docs\Commands\NewPost\" />
+    <Folder Include="Common\Security\Permissions\" />
+    <Folder Include="Common\Security\Policies\" />
+    <Folder Include="Common\Security\Request\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
