@@ -15,7 +15,6 @@
     <None Remove="Common\Interfaces\Persistence\" />
     <None Remove="Docs\Queries\GetDoc\" />
     <None Remove="Docs\Queries\ListDocs\" />
-    <None Remove="Docs\Queries\SearchDocs\" />
     <None Remove="Common\Security\Users\" />
     <None Remove="Common\Security\Roles\" />
   </ItemGroup>
@@ -30,7 +29,6 @@
     <Folder Include="Common\Interfaces\Persistence\" />
     <Folder Include="Docs\Queries\GetDoc\" />
     <Folder Include="Docs\Queries\ListDocs\" />
-    <Folder Include="Docs\Queries\SearchDocs\" />
     <Folder Include="Common\Security\Users\" />
     <Folder Include="Common\Security\Roles\" />
   </ItemGroup>

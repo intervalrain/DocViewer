@@ -2,8 +2,6 @@
 using DocViewer.Application.Common.Security.Users;
 using DocViewer.Application.Docs.Queries.GetDoc;
 using DocViewer.Application.Docs.Queries.ListDocs;
-using DocViewer.Application.Docs.Queries.SearchDocs;
-using DocViewer.Domain;
 using DocViewer.Presentation.Models.Docs;
 
 using MediatR;
