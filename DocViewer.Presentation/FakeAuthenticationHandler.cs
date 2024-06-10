@@ -2,6 +2,7 @@
 using System.Text.Encodings.Web;
 
 using DocViewer.Application.Common.Security.Roles;
+using DocViewer.Application.Common.Security.Permissions;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
@@ -31,7 +32,7 @@ public class FakeAuthenticationHandler : AuthenticationHandler<AuthenticationSch
 
         var roles = new string[] { Role.User };
 
-        var permissions = Array.Empty<string>();
+        var permissions = Permission.All;
 
         var claims = new List<Claim>
         {

@@ -1,9 +1,12 @@
-﻿using DocViewer.Domain;
+﻿using DocViewer.Application.Common.Security.Request;
+using DocViewer.Application.Common.Security.Permissions;
+
+using DocViewer.Domain;
 
 using ErrorOr;
-
 using MediatR;
 
 namespace DocViewer.Application.Docs.Queries.ListDocs;
 
-public record ListDocsQuery(string UserId) : IRequest<ErrorOr<Board>>;
+[Authorize(Permissions = Permission.Doc.Get)]
+public record ListDocsQuery(string UserId) : IAuthorizeableRequest<ErrorOr<Board>>;

@@ -1,11 +1,12 @@
-﻿using DocViewer.Domain;
+﻿using DocViewer.Application.Common.Security.Request;
+using DocViewer.Application.Common.Security.Permissions;
+using DocViewer.Domain;
 
 using ErrorOr;
 
-using MediatR;
-
 namespace DocViewer.Application.Docs.Commands.NewPost;
 
+[Authorize(Permissions = Permission.Doc.New)]
 public record NewPostCommand(
     string UserId,
     string Title,
@@ -14,4 +15,4 @@ public record NewPostCommand(
     string Keywords,
     string Description,
     string Content,
-    DateTime DateTime) : IRequest<ErrorOr<Doc>>;
+    DateTime DateTime) : IAuthorizeableRequest<ErrorOr<Doc>>;

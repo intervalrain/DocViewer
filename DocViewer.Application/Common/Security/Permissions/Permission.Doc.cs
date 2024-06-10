@@ -8,5 +8,12 @@ public static partial class Permission
         public const string List = "list:doc";
         public const string New = "new:doc";
     }
+
+    public static List<string> All => new List<string>
+    {
+        Doc.Get,
+        Doc.List,
+        Doc.New
+    };
 }
 

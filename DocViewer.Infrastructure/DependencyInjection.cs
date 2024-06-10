@@ -33,6 +33,8 @@ public static class DependencyInjection
     private static IServiceCollection AddAuthorization(this IServiceCollection services)
     {
         services.AddSingleton<ICurrentUserProvider, CurrentUserProvider>();
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<IPolicyEnforcer, PolicyEnforcer>();
         return services;
     }
 }
