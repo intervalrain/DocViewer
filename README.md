@@ -28,6 +28,8 @@
   #### Application Layer:
     + 使用 CQRS 模式來區分查詢 (Query) 和命令 (Command)。
     + 利用 MediatR 統一發動事件。
+      + 提供 AuthorizationService: 對對應的 Permissions、Roles、Policies 給予權限。
+      + 提供 ValidationService: 檢查 command 是否有符合規範。
   #### Domain Layer:
     + 包含實體 (Entities)、值物件 (Value Objects)、聚合根 (Aggregates) 和領域事件 (Domain Events)。
     + 負責核心業務邏輯和規則。
@@ -37,11 +39,6 @@
 
 ## 功能需求
 ---
-### 問題回報功能:
-+ 用戶可以查看、新建、編輯、刪除問題 (Issue)。
-+ 用戶可以在問題下方留下評論 (Comment)。
-+ 管理員可以指定受理人 (Assignee)，並更新問題狀態 (Accepted、Pending、Closed)。
-
 ### 身份驗證:
 + 使用 Windows 認證來辨識公司內部用戶，確保只有授權用戶能夠存取和操作資料。
 
