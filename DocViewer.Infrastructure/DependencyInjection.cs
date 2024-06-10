@@ -1,6 +1,7 @@
 ﻿using DocViewer.Application.Common.Interfaces;
 using DocViewer.Application.Common.Interfaces.Persistence;
 using DocViewer.Infrastructure.Common.Persistence;
+using DocViewer.Infrastructure.Common.Services;
 using DocViewer.Infrastructure.Security;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -11,8 +12,15 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
+        services.AddServices();
         services.AddPersistence();
         services.AddAuthorization();
+        return services;
+    }
+
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
         return services;
     }
 

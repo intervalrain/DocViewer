@@ -15,12 +15,14 @@ public class DocsController : ApiController
 {
     private readonly ISender _sender;
     private readonly IWebHostEnvironment _environment;
+    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly CurrentUser _currentUser;
 
-    public DocsController(ISender sender, ICurrentUserProvider currentUserProvider, IWebHostEnvironment environment)
+    public DocsController(ISender sender, ICurrentUserProvider currentUserProvider, IWebHostEnvironment environment, IDateTimeProvider dateTimeProvider)
 	{
         _sender = sender;
         _environment = environment;
+        _dateTimeProvider = dateTimeProvider;
         _currentUser = currentUserProvider.CurrentUser;
     }
 
@@ -87,7 +89,7 @@ public class DocsController : ApiController
             Keywords: model.Keywords,
             Description: model.Description,
             Content: model.Content,
-            DateTime: DateTime.Now);
+            DateTime: _dateTimeProvider.UtcNow);
         var result = await _sender.Send(command, default);
         return result.Match(
             doc => RedirectToAction(nameof(Doc), new { id = doc.DocId }),
