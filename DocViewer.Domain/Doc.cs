@@ -1,4 +1,6 @@
-﻿using DocViewer.Domain.Common;
+﻿using System.Text;
+
+using DocViewer.Domain.Common;
 
 namespace DocViewer.Domain;
 
@@ -29,6 +31,22 @@ public class Doc : Entity
         Keywords = keywords;
         DateTime = dateTime;
         Top = false;
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("---");
+        sb.AppendLine($"title: \"{Title}\"");
+        sb.AppendLine($"keywords: [\"{string.Join("\", \"", Keywords)}\"]");
+        sb.AppendLine($"description: \"{Description}\"");
+        sb.AppendLine($"date: {DateTime.ToString("yyyy-MM-ddTHH:mm:ssK")}");
+        sb.AppendLine($"category: \"{Category}\"");
+        sb.AppendLine($"author: \"{Author}\"");
+        sb.AppendLine("---");
+        sb.AppendLine(Content);
+
+        return sb.ToString();
     }
 }
 

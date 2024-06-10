@@ -1,7 +1,9 @@
 ﻿using DocViewer.Application.Common.Interfaces;
 using DocViewer.Application.Common.Security.Users;
+using DocViewer.Application.Docs.Commands.NewPost;
 using DocViewer.Application.Docs.Queries.GetDoc;
 using DocViewer.Application.Docs.Queries.ListDocs;
+using DocViewer.Contracts.Requests;
 using DocViewer.Presentation.Models.Docs;
 
 using MediatR;
@@ -12,12 +14,14 @@ namespace DocViewer.Presentation.Controllers;
 public class DocsController : ApiController
 {
     private readonly ISender _sender;
-	private readonly CurrentUser _currentUser;
+    private readonly IWebHostEnvironment _environment;
+    private readonly CurrentUser _currentUser;
 
-    public DocsController(ISender sender, ICurrentUserProvider currentUserProvider)
+    public DocsController(ISender sender, ICurrentUserProvider currentUserProvider, IWebHostEnvironment environment)
 	{
         _sender = sender;
-		_currentUser = currentUserProvider.CurrentUser;
+        _environment = environment;
+        _currentUser = currentUserProvider.CurrentUser;
     }
 
 	[HttpGet(nameof(Index))]
@@ -55,15 +59,62 @@ public class DocsController : ApiController
 		return result.Match(
 			board => PartialView("_DocsPartial", new DocsViewModel
 			{
-				Docs = board.SearchDocs(request.Text),
+				Docs = string.IsNullOrWhiteSpace(request.Text)
+						? board.Docs.ToList()
+						: board.SearchDocs(request.Text),
 				Categories = board.Categories
 			}),
 			Problem);
 	}
 
-	public class SearchRequest
+	[HttpGet(nameof(NewPost))]
+	public IActionResult NewPost()
 	{
-		public string Text { get; set; }
+		return View(new NewPostViewModel
+        {
+            Author = _currentUser.UserName
+        });
 	}
+
+    [HttpPost(nameof(NewPost))]
+    public async Task<IActionResult> NewPost(NewPostViewModel model)
+    {
+        var command = new NewPostCommand(
+            UserId: _currentUser.UserId,
+            Title: model.Title,
+            Author: model.Author,
+            Category: model.Category,
+            Keywords: model.Keywords,
+            Description: model.Description,
+            Content: model.Content,
+            DateTime: DateTime.Now);
+        var result = await _sender.Send(command, default);
+        return result.Match(
+            doc => RedirectToAction(nameof(Doc), new { id = doc.DocId }),
+            Problem);
+    }
+
+
+    [HttpPost("UploadImage")]
+    public async Task<IActionResult> UploadImage(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return Json(new { success = false, message = "No file selected" });
+
+        var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+        if (!Directory.Exists(uploadsFolder))
+            Directory.CreateDirectory(uploadsFolder);
+
+        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+        var filePath = Path.Combine(uploadsFolder, fileName);
+
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(fileStream);
+        }
+
+        var fileUrl = Url.Content("~/uploads/" + fileName);
+        return Json(new { success = true, url = fileUrl });
+    }
 }
 

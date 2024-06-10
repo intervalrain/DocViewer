@@ -3,6 +3,9 @@
   <ItemGroup>
     <ProjectReference Include="..\DocViewer.Application\DocViewer.Application.csproj" />
     <ProjectReference Include="..\DocViewer.Infrastructure\DocViewer.Infrastructure.csproj" />
+    <ProjectReference Include="..\DocViewer.Contracts\DocViewer.Contracts.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>

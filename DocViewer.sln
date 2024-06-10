@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocViewer.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocViewer.Presentation", "DocViewer.Presentation\DocViewer.Presentation.csproj", "{568EB9E7-F08E-47AC-ACC8-5F0659A07933}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocViewer.Contracts", "DocViewer.Contracts\DocViewer.Contracts.csproj", "{867C0825-015B-4209-97FC-C634F5CEA164}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{568EB9E7-F08E-47AC-ACC8-5F0659A07933}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{568EB9E7-F08E-47AC-ACC8-5F0659A07933}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{568EB9E7-F08E-47AC-ACC8-5F0659A07933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{867C0825-015B-4209-97FC-C634F5CEA164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{867C0825-015B-4209-97FC-C634F5CEA164}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{867C0825-015B-4209-97FC-C634F5CEA164}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{867C0825-015B-4209-97FC-C634F5CEA164}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

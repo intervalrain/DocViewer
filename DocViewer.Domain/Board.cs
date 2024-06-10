@@ -23,7 +23,6 @@ public class Board : Entity
             return list;
         }
     }
-    
 
     public List<Doc> GetDocs(string sort, string filter)
     {
@@ -52,7 +51,7 @@ public class Board : Entity
         return list;
     }
 
-    private int CalculateScore(Doc doc, string text)
+    private static int CalculateScore(Doc doc, string text)
     {
         int score = 0;
 
@@ -86,12 +85,25 @@ public class Board : Entity
         return result;
     }
 
+    public Doc NewDoc(string title, string author, string category, string keywords, string description, string content, DateTime dateTime)
+    {
+        var doc = new Doc(
+            docId: _docs.Count + 1,
+            title: title,
+            author: author,
+            description: description,
+            category: category,
+            content: content,
+            keywords: keywords.Split(','),
+            dateTime: dateTime);
+        _docs.Add(doc);
+        return doc;
+    }
     public async Task AddDocAsync(string raw, CancellationToken cancellationToken)
     {
         var text = await File.ReadAllTextAsync(raw, cancellationToken);
         var yaml = text.Split("---")[1].Trim();
         var content = text.Substring(text.IndexOf("---", yaml.Length) + 3).Trim();
-
         var deserializer = new DeserializerBuilder().Build();
         var metadata = deserializer.Deserialize<Dictionary<string, object>>(yaml);
 
